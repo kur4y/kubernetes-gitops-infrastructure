@@ -1,0 +1,22 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# vagrant config. for k3s single node setup
+Vagrand.configure("2") do |config|
+    config.vm.box = "debian/bullseye64"
+
+    # -- server node config. --
+    config.vm.define "tanotaS" do |server|
+        server.vm.hostname = "tanotaS"
+        # static ip
+        server.vm.network "private_network", ip: "192.168.56.110"
+
+        sever.vm.provider "virtualbox" do |vb|
+            vb.memory = 1024 # 1gb
+            vb.cpus = 1
+        end
+
+        # provisioning script to install k3s and apply kubernetes manifests
+        server.vm.provision "shell", path: "scripts/server_setup.sh"
+    end
+end
