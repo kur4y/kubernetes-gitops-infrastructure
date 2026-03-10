@@ -1,0 +1,37 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# vagrant config. for k3s cluster setup
+Vagrant.configure("2") do |config|
+    config.vm.box = "debian/bullseye64"
+
+    # -- server node config. --
+    config.vm.define "tanotaS" do |server|
+        server.vm.hostname = "tanotaS"
+        # assigned static ip for the controller
+        server.vm.network "private_network", ip: "192.168.56.110"
+
+        server.vm.provider "virtualbox" do |vb|
+            vb.memory = "1024" # 1gb
+            vb.cpus = 1
+        end
+
+        # provisioning script for k3s server
+        server.vm.provision "shell", path: "scripts/server_setup.sh"
+    end
+
+    # -- worker node config. --
+    config.vm.define "tanotaSW" do |worker|
+        worker.vm.hostname = "tanotaSW"
+        # assinged static ip for the agent
+        worker.vm.network "private_network", ip: "192.168.56.111"
+
+        worker.vm.provider "virtualbox" do |vb|
+            vb.memory = "512" # minimum
+            vb.cpus = 1
+        end
+
+        # provisioning script for k3s agent
+        worker.vm.provision "shell", path: "scripts/worker_setup.sh"
+    end
+end
