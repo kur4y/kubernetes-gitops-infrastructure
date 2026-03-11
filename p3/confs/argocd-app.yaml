@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: iot-gitops-app
+  # argo cd config. must reside on its namespace
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/kur4y/tanota-iot-gitops.git'
+    targetRevision: HEAD
+    # path of deployment.yaml inside repo
+    path: '.'
+  destination:
+    # target the local k3d cluster
+    server: 'https://kubernetes.default.svc'
+    # deploy the app into 'dev'
+    namespace: dev
+  syncPolicy:
+    automated:
+      # auto prune ressources deleted from git
+      prune: true
+      # auto heal manual modif in the cluster
+      selfHeal: true
