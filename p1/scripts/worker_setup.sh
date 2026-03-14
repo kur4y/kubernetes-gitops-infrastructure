@@ -1,8 +1,14 @@
 #!/bin/bash
 
+# update package list & install curl
+apt-get update -y
+apt-get install -y curl
+
 # -- k3s agent installation --
 # wait to ensure the server has fully started and copied the token
-sleep 10
+while [ ! -f /vagrant/node-token ]; do
+    sleep 2
+done
 
 # read the token from the shared dir.
 export K3S_TOKEN=$(cat /vagrant/node-token)
