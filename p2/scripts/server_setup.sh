@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# update package list & install curl
+apt-get update -y
+apt-get install -y curl
+
 # install k3s in server mode, binding to the private network interface
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-ip=192.168.56.110 --flannel-iface=eth1" sh -
 
