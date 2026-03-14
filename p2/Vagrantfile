@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 # vagrant config. for k3s single node setup
-Vagrand.configure("2") do |config|
+Vagrant.configure("2") do |config|
     config.vm.box = "debian/bullseye64"
 
     # -- server node config. --
@@ -11,7 +11,7 @@ Vagrand.configure("2") do |config|
         # static ip
         server.vm.network "private_network", ip: "192.168.56.110"
 
-        sever.vm.provider "virtualbox" do |vb|
+        server.vm.provider "virtualbox" do |vb|
             vb.memory = 1024 # 1gb
             vb.cpus = 1
         end
