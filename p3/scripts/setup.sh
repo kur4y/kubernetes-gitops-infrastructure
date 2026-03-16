@@ -2,8 +2,10 @@
 
 # -- system prerequisites --
 # update package list and install basic dependencies
-sudo apt-get update
-sudo apt-get install -y curl apt-transport-https ca-certificates software-properties-common
+if ! command -v curl &> /dev/null; then
+    sudo apt-get update
+    sudo apt-get install -y curl apt-transport-https ca-certificates software-properties-common
+fi
 
 # -- docker installation --
 # if it is not already present
@@ -17,12 +19,12 @@ fi
 # kubernetes command-line tool
 if ! command -v kubectl &> /dev/null; then
     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-    sudo install -r root -g root -m 0755 kubectl /usr/local/bin/kubectl
+    sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 fi
 
 # -- k3d installation --
 # install the k3d wraper to run k3s in docker
-if ! command -v &> /dev/null; then
+if ! command -v k3d &> /dev/null; then
     curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 fi
 
@@ -39,7 +41,7 @@ kubectl create namespace dev
 
 # -- argo cd deployment --
 # official argo cd install. manifest to argocd namespace
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml --server-side
 
 # wait for the argo cd server deployment
 sleep 5
