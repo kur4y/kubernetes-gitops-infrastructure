@@ -3,7 +3,7 @@
 
 # vagrant config. for k3s single node setup
 Vagrant.configure("2") do |config|
-    config.vm.box = "debian/bullseye64"
+    config.vm.box = "debian/bookworm64"
 
     # -- server node config. --
     config.vm.define "tanotaS" do |server|
