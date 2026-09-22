@@ -19,7 +19,7 @@ sudo chmod 644 /etc/rancher/k3s/k3s.yaml
 # copy the node-token to the shared dir. to make it accessible to the worker node
 sudo cp /var/lib/rancher/k3s/server/node-token /vagrant/node-token
 
-# --- ssh config. ---
+# ssh config.
 # generate a shared SSH key pair for the cluster if it doesn't exist in the shared folder
 if [ ! -f /vagrant/cluster_key ]; then
     ssh-keygen -t rsa -b 4096 -N "" -f /vagrant/cluster_key

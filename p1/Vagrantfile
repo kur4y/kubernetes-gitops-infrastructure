@@ -3,9 +3,9 @@
 
 # vagrant config. for k3s cluster setup
 Vagrant.configure("2") do |config|
-    config.vm.box = "debian/bookworm64"
+    config.vm.box = "bento/ubuntu-24.04"
 
-    # -- server node config. --
+    # server node config.
     config.vm.define "tanotaS" do |server|
         server.vm.hostname = "tanotaS"
         # assigned static ip for the controller
@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
         server.vm.provision "shell", path: "scripts/server_setup.sh"
     end
 
-    # -- worker node config. --
+    # worker node config.
     config.vm.define "tanotaSW" do |worker|
         worker.vm.hostname = "tanotaSW"
         # assinged static ip for the agent

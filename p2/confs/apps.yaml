@@ -1,4 +1,4 @@
-# -- app 1 config. --
+# app 1 config.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -36,7 +36,7 @@ spec:
   - port: 80
     targetPort: 5678
 
-# -- app 2 config. --
+# app 2 config.
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -74,7 +74,7 @@ spec:
   - port: 80
     targetPort: 5678
 
-# -- app 3 config. (default) --
+# app 3 config. (default)
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -112,7 +112,7 @@ spec:
   - port: 80
     targetPort: 5678
 
-# --- ingress routing rules ---
+# ingress routing rules
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
