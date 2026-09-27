@@ -1,26 +1,25 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# vagrant config.
 Vagrant.configure("2") do |config|
-    config.vm.box = "bento/ubuntu-24.04"
+  config.vm.box = "bento/ubuntu-24.04"
 
-    # vm config.
-    config.vm.hostname = "tanotaP3" do |p3|
-        p3.vm.hostname = "tanotaP3"
+  config.vm.define "tanotaP3" do |p3|
+    p3.vm.hostname = "tanotaP3"
 
     # port forwarding for the application
     p3.vm.network "forwarded_port", guest: 8888, host: 8888, host_ip: "127.0.0.1"
-    
+
     # port forwarding for the argo cd ui
     p3.vm.network "forwarded_port", guest: 8080, host: 8080, host_ip: "127.0.0.1"
 
     p3.vm.provider "virtualbox" do |vb|
-        # allocate sufficient resources for docker and k3d
-        vb.memory = 2048 # 2gb
-        vb.cpus = 1
+      # allocate sufficient resources for docker and k3d
+      vb.memory = 2048 # 2gb
+      vb.cpus = 1
     end
 
     # provisioning script to install k3s and apply kubernetes manifests
-    p3.vm.provision "shell", path: "scripts/server_setup.sh"
+    p3.vm.provision "shell", path: "scripts/setup.sh"
+  end
 end
