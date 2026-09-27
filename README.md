@@ -1,38 +1,52 @@
 # Kubernetes & GitOps Infrastructure (Inception-of-Things)
 
-## 📜 Overview
-This project is an advanced system administration exercise focused on container orchestration at scale. It demonstrates the deployment of a lightweight Kubernetes cluster (K3s) and the implementation of a modern GitOps continuous delivery pipeline using Argo CD.
+## Overview
+A hands-on system administration project exploring container orchestration and GitOps, built as part of the 42 School curriculum. It covers provisioning a lightweight Kubernetes cluster (K3s) with Vagrant, configuring host-based Ingress routing, and implementing a full GitOps continuous delivery pipeline with Argo CD and K3d.
 
-## 🏗️ Architecture & Phases
-The project is divided into three progressive tiers of infrastructure complexity:
+## Architecture & Phases
 
-* **Part 1: Hybrid Cluster Provisioning**
-  - Automation of a multi-node cluster (Server/Worker) using **Vagrant**.
-  - Internal networking with static IP assignment (192.168.56.x).
-  - Strict resource optimization (1 CPU / 512MB RAM per node).
+**Part 1 — Multi-Node Cluster Provisioning**
+- Two VMs (controller + agent) provisioned with Vagrant, using static private IPs.
+- K3s installed in server mode on the controller, agent mode on the worker.
+- Passwordless SSH access between host and both machines.
+- Minimal footprint: 1 CPU / 1024 MB RAM per node.
 
-* **Part 2: Advanced Routing & Scalability**
-  - High-availability application management with **K3s Ingress**.
-  - Host-based routing for multiple web applications (app1.com, app2.com).
-  - Multi-replica deployment strategies to ensure service availability.
+**Part 2 — Ingress & Multi-Replica Routing**
+- Single K3s node running three sample web applications.
+- Host-based routing via Ingress (`app1.com`, `app2.com`, default fallback).
+- One application scaled to 3 replicas to demonstrate load distribution.
 
-* **Part 3: GitOps & Continuous Delivery**
-  - Transition to **K3d** for container-based Kubernetes environments.
-  - Implementation of **Argo CD** for automated synchronization between GitHub and the cluster.
-  - Version-controlled deployments (v1/v2) with zero-touch updates.
+**Part 3 — GitOps & Continuous Delivery**
+- K3d cluster (Kubernetes-in-Docker) provisioned without Vagrant.
+- Argo CD deployed in its own namespace, watching a separate public GitHub repo.
+- Application automatically deployed and kept in sync in the `dev` namespace.
+- Switching the image tag (`v1` → `v2`) in Git triggers an automatic redeploy — no manual `kubectl apply` needed.
 
-## 🛠️ Technical Stack
-* **Orchestration:** K3s, K3d, Kubernetes
-* **Virtualization:** Vagrant
-* **GitOps:** Argo CD
-* **Containerization:** Docker
-* **Networking:** Ingress Controllers (Traefik)
+## Technical Stack
+- **Orchestration:** K3s, K3d, Kubernetes
+- **Virtualization:** Vagrant, VirtualBox
+- **GitOps:** Argo CD
+- **Containerization:** Docker
+- **Networking:** Traefik Ingress
 
-## 🚀 Usage
-The repository is structured to separate each phase of the infrastructure development:
-- `p1/`: Vagrant configuration and initial cluster setup.
-- `p2/`: Application manifests and Ingress routing rules.
-- `p3/`: K3d scripts and Argo CD GitOps configuration.
+## Repository Structure
+```
+.
+├── p1/
+│   ├── Vagrantfile
+│   └── scripts/
+├── p2/
+│   ├── Vagrantfile
+│   ├── scripts/
+│   └── confs/
+└── p3/
+    ├── Vagrantfile
+    ├── scripts/
+    └── confs/
+```
+
+## Notes
+The GitOps application source lives in a separate repository, referenced by `p3/confs/argocd-app.yaml`, so Argo CD can track and sync it independently from the infrastructure code here.
 
 ---
-*Disclaimer: This repository is for educational purposes. All configurations are designed to run in isolated virtual environments.*
+*Educational project — built and tested in isolated local VMs, not intended for production use.*
